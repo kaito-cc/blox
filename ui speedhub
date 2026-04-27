@@ -1136,15 +1136,16 @@ function Speed_Library:CreateWindow(Config)
         }, Paragraph)
 
         local function UpdateParagraphSize()
-          ParagraphContent.TextWrapped = false
-          local lineCount = math.ceil(ParagraphContent.TextBounds.X / ParagraphContent.AbsoluteSize.X)
-
-          ParagraphContent.Size = UDim2.new(1, -16, 0, 12 + (12 * lineCount))
-          Paragraph.Size = UDim2.new(1, 0, 0, ParagraphContent.AbsoluteSize.Y + 33)
-          ParagraphContent.TextWrapped = true
-
-          UpdateSizeSection()
-        end
+		    ParagraphContent.TextWrapped = true
+		    
+		    -- pakai tinggi text, bukan lebar
+		    local textHeight = ParagraphContent.TextBounds.Y
+		
+		    ParagraphContent.Size = UDim2.new(1, -16, 0, textHeight)
+		    Paragraph.Size = UDim2.new(1, 0, 0, textHeight + 33)
+		
+		    UpdateSizeSection()
+		end
 
         UpdateParagraphSize()
 
