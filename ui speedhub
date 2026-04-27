@@ -1121,29 +1121,34 @@ function Speed_Library:CreateWindow(Config)
           Name = "ParagraphTitle",
         }, Paragraph)
       
-        local ParagraphContent = Custom:Create("TextLabel", {
-          Font = Enum.Font.GothamBold,
-          Text = Content,
-          TextColor3 = Color3.fromRGB(255, 255, 255),
-          TextSize = 12,
-          TextTransparency = 0.6,
-          TextXAlignment = Enum.TextXAlignment.Left,
-          TextYAlignment = Enum.TextYAlignment.Bottom,
-          BackgroundTransparency = 0.999,
-          BorderSizePixel = 0,
-          Position = UDim2.new(0, 10, 0, 23),
-          Name = "ParagraphContent",
-        }, Paragraph)
+        local ParagraphContent = Custom:Create("ScrollingFrame", {
+		    BackgroundTransparency = 0.999,
+		    BorderSizePixel = 0,
+		    Position = UDim2.new(0, 10, 0, 23),
+		    Size = UDim2.new(1, -16, 0, 80), -- tinggi tetap (bisa kamu ubah)
+		    CanvasSize = UDim2.new(0, 0, 0, 0),
+		    ScrollBarThickness = 4,
+		    AutomaticCanvasSize = Enum.AutomaticSize.Y,
+		    Name = "ParagraphContent",
+		}, Paragraph)
+
+		local ContentLabel = Custom:Create("TextLabel", {
+		    Font = Enum.Font.GothamBold,
+		    Text = Content,
+		    TextColor3 = Color3.fromRGB(255, 255, 255),
+		    TextSize = 12,
+		    TextTransparency = 0.6,
+		    TextXAlignment = Enum.TextXAlignment.Left,
+		    TextYAlignment = Enum.TextYAlignment.Top,
+		    BackgroundTransparency = 1,
+		    BorderSizePixel = 0,
+		    Size = UDim2.new(1, -5, 0, 0),
+		    AutomaticSize = Enum.AutomaticSize.Y,
+		    TextWrapped = true
+		}, ParagraphContent)
 
         local function UpdateParagraphSize()
-		    ParagraphContent.TextWrapped = true
-		    
-		    -- pakai tinggi text, bukan lebar
-		    local textHeight = ParagraphContent.TextBounds.Y
-		
-		    ParagraphContent.Size = UDim2.new(1, -16, 0, textHeight)
-		    Paragraph.Size = UDim2.new(1, 0, 0, textHeight + 33)
-		
+		    Paragraph.Size = UDim2.new(1, 0, 0, 110) -- tinggi fix
 		    UpdateSizeSection()
 		end
 
@@ -1152,14 +1157,12 @@ function Speed_Library:CreateWindow(Config)
         ParagraphContent:GetPropertyChangedSignal("AbsoluteSize"):Connect(UpdateParagraphSize)
 
         function SettingFuncs:Set(Config)
-          local Title = Config[1] or Config.Title or ""
-          local Content = Config[2] or Config.Content or ""
-
-          ParagraphTitle.Text = Title
-          ParagraphContent.Text = Content
-
-          UpdateParagraphSize()
-        end
+		    local Title = Config[1] or Config.Title or ""
+		    local Content = Config[2] or Config.Content or ""
+		
+		    ParagraphTitle.Text = Title
+		    ContentLabel.Text = Content
+		end
 
         return SettingFuncs
       end
